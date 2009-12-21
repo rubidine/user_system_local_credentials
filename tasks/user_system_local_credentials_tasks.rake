@@ -1,8 +1,3 @@
-# desc "Explaining what the task does"
-# task :user_system_local_credentials do
-#   # Task goes here
-# end
-
 namespace 'user_system_local_credentials' do
 
   desc 'run migrations'

@@ -42,8 +42,7 @@ module UserSystem
     
         u = scope.find(:first)
         if (u and (u.passphrase == User.pw_hash(passphrase)))
-          u.touch(:last_login)
-          u.sessions.clear
+          u.logged_in(self)
           s = session_model.create(:user => u)
           if s.new_record?
             u.error_message = "Unable to create session: " +

@@ -24,8 +24,8 @@ module UserSystem
     module UserModelMixin
 
       def self.included kls
-        kls.validates_length_of :passphrase, :minimum => 5
-        kls.validate_on_create :passphrase_confirmation_match
+        kls.validate :passphrase_length
+        kls.validate :passphrase_confirmation_match
         kls.validates_presence_of :passphrase, :identifier => 'has_passphrase'
         kls.send :attr_reader, :passphrase_confirmation
         kls.send :extend, ClassMethods
@@ -33,16 +33,17 @@ module UserSystem
 
       ##
       #
-      # Passwords are hased, so compute the hash when assigning it.
+      # Passwords are hashed, so compute the hash when assigning it.
       #
       def passphrase= new_passphrase
         return if new_passphrase.blank?
+        @passphrase = new_passphrase
         write_attribute(:passphrase, pw_hash(new_passphrase))
       end
 
       ##
       #
-      # Passwords are hased, so compute the hash when assigning it.
+      # Passwords are hashed, so compute the hash when assigning it.
       #
       def passphrase_confirmation= new_passphrase
         @passphrase_confirmation = pw_hash(new_passphrase)
@@ -52,6 +53,16 @@ module UserSystem
 
       def pw_hash str
         self.class.pw_hash(str)
+      end
+
+      #
+      # This is not a validates_length_of because at that point, the passphrase
+      # is already a hash that always has a length of 32.
+      #
+      def passphrase_length
+        if @passphrase.length < 5
+          errors.add(:passphrase, 'is too short (minimum is 5 characters)')
+        end
       end
 
       def passphrase_confirmation_match

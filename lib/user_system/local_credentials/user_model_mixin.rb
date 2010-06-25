@@ -60,7 +60,7 @@ module UserSystem
       # is already a hash that always has a length of 32.
       #
       def passphrase_length
-        if @passphrase.length < 5
+        if @passphrase and @passphrase.length < 5
           errors.add(:passphrase, 'is too short (minimum is 5 characters)')
         end
       end

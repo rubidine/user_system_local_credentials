@@ -66,7 +66,7 @@ module UserSystem
       end
 
       def passphrase_confirmation_match
-        unless @passphrase_confirmation == passphrase
+        unless @passphrase_confirmation == @passphrase
           errors.add(:passphrase, 'does not match confirmation')
         end
       end

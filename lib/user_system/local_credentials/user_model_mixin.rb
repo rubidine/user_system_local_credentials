@@ -67,7 +67,7 @@ module UserSystem
 
       def passphrase_confirmation_match
         if changes['passphrase'] and changes['passphrase'][0].blank?
-          unless @passphrase_confirmation == passphrase
+          unless @passphrase_confirmation == @passphrase
             errors.add(:passphrase, 'does not match confirmation')
           end
         end

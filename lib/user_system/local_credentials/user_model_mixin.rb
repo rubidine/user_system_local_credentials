@@ -37,8 +37,8 @@ module UserSystem
       #
       def passphrase= new_passphrase
         return if new_passphrase.blank?
-        @passphrase = new_passphrase
-        write_attribute(:passphrase, pw_hash(new_passphrase))
+        @passphrase = pw_hash(new_passphrase)
+        write_attribute(:passphrase, @passphrase)
       end
 
       ##
@@ -66,10 +66,8 @@ module UserSystem
       end
 
       def passphrase_confirmation_match
-        if changes['passphrase'] and changes['passphrase'][0].blank?
-          unless @passphrase_confirmation == @passphrase
-            errors.add(:passphrase, 'does not match confirmation')
-          end
+        unless @passphrase_confirmation == @passphrase
+          errors.add(:passphrase, 'does not match confirmation')
         end
       end
 
